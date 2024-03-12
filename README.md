@@ -2,6 +2,26 @@
 
 Trash classification is the process of sorting waste materials into distinct categories.
 
+## Members
+
+Name | StudentID
+------------- | -------------
+นาย วิทวัส ประพันธ์วงศ์  | 6410450265 
+นาย ปาณชัย คชกาษร | 6410450176 
+นางสาว ธัญวราลี ธเนศธรรมโรจน์ | 6410450150
+
+
+## Directories purpose
+
+Dir | Purpose
+------------- | -------------
+Our_Data |  folder นี้ไว้เก็บไฟล์ data ที่ทำการหามาเอง
+docs | folder นี้ไว้เก็บ doc และ presentation pdf ของ project
+sandbox | folder นี้ไว้เก็บการทดลอง code ต่างๆ รวมถึงการเทรน model
+src | folder เก็บตัวงาน final ของ project
+
+
+
 ## Installation
 
 Use the package manager pip to install after making an environment with anaconda.
@@ -44,7 +64,41 @@ pip install ultralytics
 jupyter notebook
 ```
 
-then select TrashClassification notebook
+then select TrashDetection&Classification notebook ใน folder src
+
+## data preprocessing
+
+ทำการโหลดข้อมูลโดย base จากชื่อ folder เป็น label
+
+```bash
+
+categories = ['battery', 'biological', 'brown-glass', 'cardboard', 'clothes', 'green-glass', 'metal', 'paper', 'plastic', 'shoes', 'trash', 'white-glass']
+
+filenames_list = []
+categories_list = []
+
+for category in categories:
+    filenames = os.listdir(base_path + category)
+    
+    filenames_list += filenames
+    categories_list += [category] * len(filenames)
+
+df = pd.DataFrame({
+    'filename': filenames_list,
+    'category': categories_list
+})
+
+df = add_class_name_prefix(df, 'filename')
+
+df = df.sample(frac=1).reset_index(drop=True)
+```
+จากนั้นใช้ ImageGenerator สำหรับรูปภาพ
+
+
+## TrashClassification model
+ 
+ใช้ model YOLOV8 ในการทำ detection และจากรูปที่ได้ส่งเข้า model CNN MobileNetV2
+รายละเอียดสามารถดูใน sandbox/trainModel.ipynb
 
 
 ## License
